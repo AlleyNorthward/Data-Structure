@@ -1,0 +1,14 @@
+[
+{
+  "directory": "F:/0github/Data-Structure/build",
+  "command": "F:\\Qt\\Qt.6.9\\Tools\\mingw1310_64\\bin\\gcc.exe -IF:/0github/Data-Structure/data_structure/include -O3 -DNDEBUG -std=gnu17 -o CMakeFiles\\Main.dir\\src\\main.c.obj -c F:\\0github\\Data-Structure\\src\\main.c",
+  "file": "F:\\0github\\Data-Structure\\src\\main.c",
+  "output": "CMakeFiles\\Main.dir\\src\\main.c.obj"
+},
+{
+  "directory": "F:/0github/Data-Structure/build",
+  "command": "F:\\Qt\\Qt.6.9\\Tools\\mingw1310_64\\bin\\gcc.exe -IF:/0github/Data-Structure/data_structure/include -O3 -DNDEBUG -std=gnu17 -o data_structure\\CMakeFiles\\data_structure.dir\\src\\sqlist.c.obj -c F:\\0github\\Data-Structure\\data_structure\\src\\sqlist.c",
+  "file": "F:\\0github\\Data-Structure\\data_structure\\src\\sqlist.c",
+  "output": "data_structure\\CMakeFiles\\data_structure.dir\\src\\sqlist.c.obj"
+}
+]
