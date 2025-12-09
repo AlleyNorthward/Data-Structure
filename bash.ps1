@@ -61,7 +61,7 @@ function Invoke-Project{
         }
         cmake --build .
         move-item .\compile_commands.json ..\ -force
-        & .\$Name.exe
+#         & .\$Name.exe
         cd..
     }
     elseif($Mode -eq "Debug"){
@@ -86,7 +86,7 @@ function Invoke-Project{
         }
         cmake --build .
         move-item .\compile_commands.json ..\ -force
-        & gdb .\$Name.exe 
+#         & gdb .\$Name.exe 
         cd..
     }
     else{

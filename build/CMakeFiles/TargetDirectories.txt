@@ -1,6 +1,0 @@
-F:/0github/Data-Structure/build/CMakeFiles/Main.dir
-F:/0github/Data-Structure/build/CMakeFiles/edit_cache.dir
-F:/0github/Data-Structure/build/CMakeFiles/rebuild_cache.dir
-F:/0github/Data-Structure/build/data_structure/CMakeFiles/data_structure.dir
-F:/0github/Data-Structure/build/data_structure/CMakeFiles/edit_cache.dir
-F:/0github/Data-Structure/build/data_structure/CMakeFiles/rebuild_cache.dir
