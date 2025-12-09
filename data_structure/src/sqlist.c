@@ -2,7 +2,7 @@
 #include <malloc.h>
 #include<stdlib.h>
 
-Status InitList_Sq(SqList* L){
+Status InitList_Sq(SqList* L, int LIST_INIT_SIZE){
     L->base = (ElemType* )malloc(LIST_INIT_SIZE * sizeof(ElemType));
     if(!L->base) exit(OVERFLOW_);
 

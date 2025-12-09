@@ -12,6 +12,7 @@ add_executable(
 )
 
 add_subdirectory(data_structure)
+
 target_include_directories(
     ${ENTRY}
     PUBLIC
