@@ -95,7 +95,7 @@ Status ListErase_Sq(SqList* L, int position, ElemType* e, u8 flag){
 //     position => [0, L->size - 1]
 //     k = position , delete , position > k 
     *e = L->base[position];
-//     e = &L->base[position];  这样写行吗?
+//     e = &L->base[position];  right?
     for(k = position; k < L->size - 1; k ++){
         L->base[k] = L->base[k+1];
     }
