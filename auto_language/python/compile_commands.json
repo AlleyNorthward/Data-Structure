@@ -1,0 +1,8 @@
+[
+{
+  "directory": "F:/0github/Data-Structure/auto_language/python/build",
+  "command": "F:\\Qt\\Qt.6.9\\Tools\\mingw1310_64\\bin\\c++.exe -Ddata_structure_EXPORTS -isystem E:/Anaconda3/envs/AI/include -isystem F:/0github/Data-Structure/auto_language/python/pybind11/include -isystem F:/0github/Data-Structure/auto_language/python/data_structurelib/include -isystem F:/0github/Data-Structure/auto_language/python/data_structure_cxxlib/include -std=gnu++17 -fvisibility=hidden -o CMakeFiles\\data_structure.dir\\bind.cpp.obj -c F:\\0github\\Data-Structure\\auto_language\\python\\bind.cpp",
+  "file": "F:\\0github\\Data-Structure\\auto_language\\python\\bind.cpp",
+  "output": "CMakeFiles\\data_structure.dir\\bind.cpp.obj"
+}
+]
