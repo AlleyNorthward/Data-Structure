@@ -11,6 +11,7 @@
 
 typedef int ElemType;
 typedef int Status;
+typedef unsigned char u8;
 
 typedef struct{
     ElemType* base;
@@ -18,7 +19,13 @@ typedef struct{
     int size;
 }SqList;
 
-Status InitList_Sq(SqList* L, int LIST_INIT_SIZE);
+Status InitList_Sq(SqList* L, int capacity);
 Status DestroyList_Sq(SqList* L);
+Status ListClear_Sq(SqList* L);
+Status ListInsert_Sq(SqList* L, int position, ElemType e, u8 flag);
+Status ListBulkInsert_Sq(SqList* L, int position, int* arr, int arr_size, u8 flag);
+Status ListErase_Sq(SqList* L, int position, ElemType* e, u8 flag);
+
+
 #endif
 
