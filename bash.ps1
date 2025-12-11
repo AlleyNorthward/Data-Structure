@@ -110,7 +110,7 @@ function Invoke-Build{
     param(
         [Alias("M")]
         [ValidateSet("ON", "OFF")]
-        [string]$Mode = "ON"
+        [string]$Mode = "OFF"
     )
     if($Mode -eq "ON"){
         cmake -S . -B build -DBUILD_QUESTIONS=ON
