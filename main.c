@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "sqlist.h"
+#include "a.h"
 
 
 int main(){
@@ -26,5 +27,6 @@ int main(){
     if(DestroyList_Sq(&L)) printf("success!\n");
     else printf("failed!\n");
 
+    test_();
     return 0;
 }

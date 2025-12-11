@@ -1,4 +1,5 @@
 function Invoke-Project{
+    # 不要写复杂脚本. 写灵活性强的. 因为你不知道接下来存在多少种变化的可能性, 要是仍想兼容, 那么修改脚本也会成为一种复杂的事. 可是脚本本来就是为了简化操作的, 如果太复杂, 又有什么存在的必要呢? 
     param(
         [Alias("N")]
         [string]$Name = "Main",
@@ -105,13 +106,42 @@ function Invoke-Project{
     }
 }
 
+function Invoke-Build{
+    param(
+        [Alias("M")]
+        [ValidateSet("ON", "OFF")]
+        [string]$Mode = "ON"
+    )
+    if($Mode -eq "ON"){
+        cmake -S . -B build -DBUILD_QUESTIONS=ON
+    }
+    else{
+        cmake -S . -B build -DBUILD_QUESTIONS=OFF
+    }
 
+    cd build
+    if (Test-Path compile_commands.json) {
+        move-item .\compile_commands.json ..\ -force
+    }
+    cd ..
+}
 
+function Invoke-Run{
+    cmake --build build --config Release
+    cd build
+    .\main.exe
+    cd ..
+}
 
+function Invoke-Delete{
+    if (Test-Path build) {
+        Remove-Item build -Recurse -Force
+    }
+#     if (Test-Path compile_commands.json) {
+#         Remove-Item compile_commands.json -Force
+#     }
 
-
-
-
-
-
-
+    if (Test-Path .cache) {
+        Remove-Item .cache -Recurse -Force
+    }
+}

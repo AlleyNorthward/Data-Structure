@@ -1,14 +1,20 @@
 [
 {
   "directory": "F:/0github/Data-Structure/build",
-  "command": "F:\\Qt\\Qt.6.9\\Tools\\mingw1310_64\\bin\\gcc.exe -IF:/0github/Data-Structure/data_structure/include -O3 -DNDEBUG -std=gnu99 -o CMakeFiles\\main.dir\\main.c.obj -c F:\\0github\\Data-Structure\\main.c",
+  "command": "F:\\Qt\\Qt.6.9\\Tools\\mingw1310_64\\bin\\gcc.exe -IF:/0github/Data-Structure/questions/sqlist/include -IF:/0github/Data-Structure/data_structure/include -std=gnu99 -o CMakeFiles\\main.dir\\main.c.obj -c F:\\0github\\Data-Structure\\main.c",
   "file": "F:\\0github\\Data-Structure\\main.c",
   "output": "CMakeFiles\\main.dir\\main.c.obj"
 },
 {
   "directory": "F:/0github/Data-Structure/build",
-  "command": "F:\\Qt\\Qt.6.9\\Tools\\mingw1310_64\\bin\\gcc.exe -IF:/0github/Data-Structure/data_structure/include -O3 -DNDEBUG -std=gnu99 -o data_structure\\CMakeFiles\\data_structurelib.dir\\src\\sqlist.c.obj -c F:\\0github\\Data-Structure\\data_structure\\src\\sqlist.c",
+  "command": "F:\\Qt\\Qt.6.9\\Tools\\mingw1310_64\\bin\\gcc.exe -IF:/0github/Data-Structure/data_structure/include -std=gnu99 -o data_structure\\CMakeFiles\\data_structurelib.dir\\src\\sqlist.c.obj -c F:\\0github\\Data-Structure\\data_structure\\src\\sqlist.c",
   "file": "F:\\0github\\Data-Structure\\data_structure\\src\\sqlist.c",
   "output": "data_structure\\CMakeFiles\\data_structurelib.dir\\src\\sqlist.c.obj"
+},
+{
+  "directory": "F:/0github/Data-Structure/build",
+  "command": "F:\\Qt\\Qt.6.9\\Tools\\mingw1310_64\\bin\\gcc.exe -IF:/0github/Data-Structure/questions/sqlist/include -IF:/0github/Data-Structure/data_structure/include -std=gnu99 -o questions\\sqlist\\CMakeFiles\\questions_sqlistlib.dir\\src\\a.c.obj -c F:\\0github\\Data-Structure\\questions\\sqlist\\src\\a.c",
+  "file": "F:\\0github\\Data-Structure\\questions\\sqlist\\src\\a.c",
+  "output": "questions\\sqlist\\CMakeFiles\\questions_sqlistlib.dir\\src\\a.c.obj"
 }
 ]
