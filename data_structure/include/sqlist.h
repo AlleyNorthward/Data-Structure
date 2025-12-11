@@ -12,6 +12,7 @@
 typedef int ElemType;
 typedef int Status;
 typedef unsigned char u8;
+typedef Status (*Visit)(ElemType);
 
 typedef struct{
     ElemType* base;
@@ -25,7 +26,9 @@ Status ListClear_Sq(SqList* L);
 Status ListInsert_Sq(SqList* L, int position, ElemType e, u8 flag);
 Status ListBulkInsert_Sq(SqList* L, int position, int* arr, int arr_size, u8 flag);
 Status ListErase_Sq(SqList* L, int position, ElemType* e, u8 flag);
-
+int ListFind_Sq(SqList L, ElemType e, u8 flag);
+Status PrintElem_(ElemType e);
+Status ListTraverse_Sq(SqList L, Status(*visit)(ElemType));
 
 #endif
 

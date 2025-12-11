@@ -1,6 +1,7 @@
 #include "sqlist.h"
 #include <malloc.h>
 #include<stdlib.h>
+#include<stdio.h>
 
 Status InitList_Sq(SqList* L, int capacity){
     L->base = (ElemType* )malloc(capacity * sizeof(ElemType));
@@ -99,18 +100,36 @@ Status ListErase_Sq(SqList* L, int position, ElemType* e, u8 flag){
     for(k = position; k < L->size - 1; k ++){
         L->base[k] = L->base[k+1];
     }
+    L->base[L->size] = NULL_;
     L->size--;
     return OK_;
 }
 
+int ListFind_Sq(SqList L, ElemType e, u8 flag){
+    int i, position;
+    for(i = 0; i < L.size; i++){
+        if(L.base[i] == e){
+            position = i;
+            break;
+        }
+    }
+    if(flag) position = position + 1;
+    return position;
+}
 
+Status PrintElem_(ElemType e){
+    printf("%d", e);
+    return OK_;
+}
 
-
-
-
-
-
-
-
+Status ListTraverse_Sq(SqList L, Visit visit){
+    Status flag;
+    int i;
+    for(i = 0; i < L.size; i++){
+        flag = visit(L.base[i]);
+        if(flag != OK_) return ERROR_;
+    }
+    return OK_;
+}
 
 

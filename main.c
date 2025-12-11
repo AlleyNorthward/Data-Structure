@@ -19,15 +19,12 @@ int main(){
 
     ListBulkInsert_Sq(&L, 0, arr, size, 0);
 
-    for (i = 0; i < L.size; i++){
-        printf("%d\n", L.base[i]);
-    }
-
-    ElemType e;
-    ListErase_Sq(&L, 3, &e, 0);
-    printf("%d\n", e);
-
+    ListTraverse_Sq(L, PrintElem_);
+    ElemType e = 6;
+    int position = ListFind_Sq(L, e, 0);
+    printf("%d\n", position);
     if(DestroyList_Sq(&L)) printf("success!\n");
     else printf("failed!\n");
+
     return 0;
 }
