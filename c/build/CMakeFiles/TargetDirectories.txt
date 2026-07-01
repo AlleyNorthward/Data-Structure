@@ -1,3 +1,0 @@
-/home/alley/data-structure/c/build/CMakeFiles/main.dir
-/home/alley/data-structure/c/build/CMakeFiles/edit_cache.dir
-/home/alley/data-structure/c/build/CMakeFiles/rebuild_cache.dir
