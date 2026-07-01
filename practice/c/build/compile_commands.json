@@ -1,0 +1,14 @@
+[
+{
+  "directory": "F:/0github/Data-Structure/practice/c/build",
+  "command": "F:\\Qt\\Qt.6.9\\Tools\\mingw1310_64\\bin\\gcc.exe -IF:/0github/Data-Structure/practice/c/include -std=gnu99 -o CMakeFiles\\main.dir\\main.c.obj -c F:\\0github\\Data-Structure\\practice\\c\\main.c",
+  "file": "F:\\0github\\Data-Structure\\practice\\c\\main.c",
+  "output": "CMakeFiles\\main.dir\\main.c.obj"
+},
+{
+  "directory": "F:/0github/Data-Structure/practice/c/build",
+  "command": "F:\\Qt\\Qt.6.9\\Tools\\mingw1310_64\\bin\\gcc.exe -IF:/0github/Data-Structure/practice/c/include -std=gnu99 -o CMakeFiles\\main.dir\\src\\List.c.obj -c F:\\0github\\Data-Structure\\practice\\c\\src\\List.c",
+  "file": "F:\\0github\\Data-Structure\\practice\\c\\src\\List.c",
+  "output": "CMakeFiles\\main.dir\\src\\List.c.obj"
+}
+]
