@@ -1,7 +1,6 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "config.h"
 #include "stdbool.h"
 
 typedef struct Node {
@@ -28,4 +27,6 @@ void insert_L(List *list, int pos, Node *node);
 void print_L(List *list, void (*print_cb)(Node *node));
 void destory_L(List *list, void (*free_cb)(Node *node));
 void clear(List *list, void (*free_cb)(Node *node));
+void erase_L(List *list, int pos, void (*free_cb)(Node *node));
+void reverse_L(List *list);
 #endif

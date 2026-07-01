@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,--dependency-file=CMakeFiles/main.dir/link.d CMakeFiles/main.dir/main.c.o CMakeFiles/main.dir/src/CDList.c.o CMakeFiles/main.dir/src/CList.c.o CMakeFiles/main.dir/src/DList.c.o CMakeFiles/main.dir/src/List.c.o -o main

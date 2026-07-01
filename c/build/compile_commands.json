@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/alley/data-structure/c/build",
+  "command": "/usr/bin/cc  -I/home/alley/data-structure/c/include -std=gnu99 -o CMakeFiles/main.dir/main.c.o -c /home/alley/data-structure/c/main.c",
+  "file": "/home/alley/data-structure/c/main.c",
+  "output": "CMakeFiles/main.dir/main.c.o"
+},
+{
+  "directory": "/home/alley/data-structure/c/build",
+  "command": "/usr/bin/cc  -I/home/alley/data-structure/c/include -std=gnu99 -o CMakeFiles/main.dir/src/CDList.c.o -c /home/alley/data-structure/c/src/CDList.c",
+  "file": "/home/alley/data-structure/c/src/CDList.c",
+  "output": "CMakeFiles/main.dir/src/CDList.c.o"
+},
+{
+  "directory": "/home/alley/data-structure/c/build",
+  "command": "/usr/bin/cc  -I/home/alley/data-structure/c/include -std=gnu99 -o CMakeFiles/main.dir/src/CList.c.o -c /home/alley/data-structure/c/src/CList.c",
+  "file": "/home/alley/data-structure/c/src/CList.c",
+  "output": "CMakeFiles/main.dir/src/CList.c.o"
+},
+{
+  "directory": "/home/alley/data-structure/c/build",
+  "command": "/usr/bin/cc  -I/home/alley/data-structure/c/include -std=gnu99 -o CMakeFiles/main.dir/src/DList.c.o -c /home/alley/data-structure/c/src/DList.c",
+  "file": "/home/alley/data-structure/c/src/DList.c",
+  "output": "CMakeFiles/main.dir/src/DList.c.o"
+},
+{
+  "directory": "/home/alley/data-structure/c/build",
+  "command": "/usr/bin/cc  -I/home/alley/data-structure/c/include -std=gnu99 -o CMakeFiles/main.dir/src/List.c.o -c /home/alley/data-structure/c/src/List.c",
+  "file": "/home/alley/data-structure/c/src/List.c",
+  "output": "CMakeFiles/main.dir/src/List.c.o"
+}
+]
