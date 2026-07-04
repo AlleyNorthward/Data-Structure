@@ -10,6 +10,9 @@ file(
   src/*.c
 )
 
+file(GLOB ARRAY_SOURCES src/array/*.c)
+list(REMOVE_ITEM LIB_SOURCES ${ARRAY_SOURCES})
+
 add_library(ds_lib STATIC ${LIB_SOURCES})
 
 target_include_directories(
