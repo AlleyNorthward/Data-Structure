@@ -237,3 +237,18 @@ void reverse_DL(DList *list) {
   list->head = list->tail;
   list->tail = pre;
 }
+
+DNode* find_DL(DList* list, int pos){
+  if(list == NULL || pos < 0 || pos > size_DL(list))
+    return NULL;
+
+  if(pos == size_DL(list))
+    pos = pos - 1;
+
+  DNode* cur = front_DL(list);
+  for(int i = 0; i < pos; ++i){
+    cur = cur->next;
+  }
+
+  return cur;
+}

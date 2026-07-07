@@ -228,3 +228,29 @@ void reverse_CL(CList *list) {
   list->tail = cur;
   list->head = pre;
 }
+
+CNode* find_CL(CList* list, int pos){
+  if(list == NULL || pos < 0 || pos > size_CL(list))
+    return NULL;
+
+  if(pos == size_CL(list))
+    pos = pos - 1;
+
+  CNode* cur = front_CL(list);
+  for(int i = 0; i < pos; ++i){
+    cur = cur->next;
+  }
+
+  return cur;
+}
+
+
+
+
+
+
+
+
+
+
+

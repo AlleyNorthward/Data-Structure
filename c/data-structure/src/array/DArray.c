@@ -13,7 +13,7 @@ DArray *newDArray(int cap, int elem_size) {
   if (arr == NULL)
     return NULL;
 
-  arr->data = malloc(cap * elem_size);
+  arr->data = calloc(cap, elem_size);
   if (arr->data == NULL) {
     free(arr);
     return NULL;
@@ -111,4 +111,40 @@ void *pop_back_DA(DArray *arr) {
 
   arr->len--;
   return at_DA(arr, size_DA(arr));
+}
+
+void insert_DA(DArray *arr, int pos, void *elem) {
+  if (arr == NULL || elem == NULL || pos < 0 || pos > size_DA(arr))
+    return;
+
+  if (size_DA(arr) >= capacity_DA(arr))
+    expand_DA(arr);
+
+  void *dest = at_DA(arr, pos);
+
+  int move_bytes = (size_DA(arr) - pos) * arr->elem_size;
+
+  if (move_bytes > 0) {
+    memmove(dest + arr->elem_size, dest, move_bytes);
+  }
+
+  memcpy(dest, elem, arr->elem_size);
+  ++arr->len;
+}
+
+void erase_DA(DArray *arr, int pos, void (*free_cb)(void *elem)) {
+  if (arr == NULL || pos >= size_DA(arr))
+    return;
+
+  char *del_pos = (char *)arr->data + pos * arr->elem_size;
+
+  if (free_cb != NULL) {
+    free_cb(del_pos);
+  }
+
+  int move_bytes = (size_DA(arr) - pos - 1) * arr->elem_size;
+  if (move_bytes > 0) {
+    memmove(del_pos, del_pos + arr->elem_size, move_bytes);
+  }
+  --arr->len;
 }

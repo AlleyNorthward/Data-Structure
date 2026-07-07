@@ -29,6 +29,7 @@ void push_front_DL(DList *list, DNode *node);
 DNode *pop_back_DL(DList *list);
 DNode *pop_front_DL(DList *list);
 
+DNode* find_DL(DList* list, int pos);
 void insert_DL(DList* list, int pos, DNode* node);
 void erase_DL(DList* list, int pos, void(*free_cb)(DNode* node));
 void reverse_DL(DList* list);

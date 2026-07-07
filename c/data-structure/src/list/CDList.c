@@ -259,3 +259,18 @@ void reverse_CDL(CDList *list) {
   list->tail = cur;
   list->head = pre;
 }
+
+CDNode *find_CDL(CDList *list, int pos) {
+  if (list == NULL || pos < 0 || pos > size_CDL(list))
+    return NULL;
+
+  if (pos == size_CDL(list))
+    pos = pos - 1;
+
+  CDNode *cur = front_CDL(list);
+  for (int i = 0; i < pos; ++i) {
+    cur = cur->next;
+  }
+
+  return cur;
+}

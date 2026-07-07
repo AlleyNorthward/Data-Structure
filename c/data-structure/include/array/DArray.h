@@ -3,6 +3,15 @@
 
 #include <stdbool.h>
 
+#define AT_PTR_DA(arr, pos, type)                                              \
+  ((type *)((char *)(arr)->data + (pos) * (arr)->elem_size))
+
+#define GET_DA(arr, pos, type) (*AT_PTR_DA(arr, pos, type))
+#define GET_INT_DA(arr, pos) GET_DA(arr, pos, int)
+#define PUSH_BACK_INT_DA(arr, val) push_back_DA((arr), &(int){val})
+#define POP_BACK_INT_DA(arr) (*(int*)pop_back_DA(arr))
+#define INSERT_INT_DA(arr, pos, val) insert_DA((arr), pos, &(int){val})
+
 typedef struct DArray {
   void *data;
   int len;

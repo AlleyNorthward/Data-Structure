@@ -28,6 +28,7 @@ void push_front_CL(CList *list, CNode *node);
 CNode *pop_back_CL(CList *list);
 CNode *pop_front_CL(CList *list);
 
+CNode* find_CL(CList* list, int pos);
 void insert_CL(CList* list, int pos, CNode* node);
 void erase_CL(CList* list, int pos, void (* free_cb)(CNode* node));
 void reverse_CL(CList* list);

@@ -1,26 +1,18 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.16)
+
 project(C_DATA LANGUAGES C)
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-file(
-  GLOB_RECURSE
-  LIB_SOURCES
-  src/*.c
-)
+add_subdirectory(data-structure)
 
-file(GLOB ARRAY_SOURCES src/array/*.c)
-list(REMOVE_ITEM LIB_SOURCES ${ARRAY_SOURCES})
+option(BUILD_TESTS "build test program" OFF)
+if(BUILD_TESTS)
+  add_subdirectory(test)
+else()
+  add_executable(main main.c)
+  target_link_libraries(main PRIVATE ds_lib)
+endif()
 
-add_library(ds_lib STATIC ${LIB_SOURCES})
-
-target_include_directories(
-  ds_lib
-  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/list
-  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/list
-)
-
-add_executable(main main.c)
-target_link_libraries(main PRIVATE ds_lib)

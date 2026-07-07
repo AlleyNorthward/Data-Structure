@@ -153,6 +153,23 @@ void print_L(List *list, void (*print_cb)(Node *node)) {
   putchar('\n');
 }
 
+Node *find_L(List *list, int pos) {
+  // pos [0, size);
+  if (list == NULL || pos < 0 || pos > size_L(list))
+    return NULL;
+
+  if (pos == size_L(list))
+    pos = size_L(list) - 1;
+
+  Node *cur = list->head;
+
+  for (int i = 0; i < pos; ++i) {
+    cur = cur->next;
+  }
+
+  return cur;
+}
+
 void insert_L(List *list, int pos, Node *node) {
   if (list == NULL || node == NULL || pos < 0 || pos > size_L(list))
     return;
@@ -167,10 +184,7 @@ void insert_L(List *list, int pos, Node *node) {
     return;
   }
 
-  Node *cur = list->head;
-  for (int i = 0; i < pos - 1; ++i) {
-    cur = cur->next;
-  }
+  Node *cur = find_L(list, pos - 1);
 
   node->next = cur->next;
   cur->next = node;
@@ -195,10 +209,7 @@ void erase_L(List *list, int pos, void (*free_cb)(Node *node)) {
     return;
   }
 
-  Node *cur = list->head;
-  for (int i = 0; i < pos - 1; ++i) {
-    cur = cur->next;
-  }
+  Node *cur = find_L(list, pos - 1);
 
   Node *del = cur->next;
   cur->next = del->next;
