@@ -127,7 +127,7 @@ void test_pop_back(void) {
   destroy_DA(array, NULL);
 }
 
-void test_insert(void) {
+void test_insert_by_pos(void) {
   DArray *array = newDArray(0, sizeof(int));
 
   for (int i = 0; i < 10; ++i) {
@@ -135,10 +135,10 @@ void test_insert(void) {
   }
 
   TEST_CHECK(size_DA(array) == 10);
-  INSERT_INT_DA(array, 5, 101);
+  INSERT_INT_BY_POS_DA(array, 5, 101);
   TEST_CHECK(GET_INT_DA(array, 5) == 101);
   TEST_CHECK(GET_INT_DA(array, 0) == 0);
-  insert_DA(array, 3, &(int){104});
+  insert_by_pos_DA(array, 3, &(int){104});
   TEST_CHECK(GET_INT_DA(array, 3) == 104);
   TEST_CHECK(size_DA(array) == 12);
   clear_DA(array, NULL);
@@ -147,20 +147,20 @@ void test_insert(void) {
   destroy_DA(array, NULL);
 }
 
-void test_erase(void) {
+void test_erase_by_pos(void) {
   DArray *array = newDArray(0, sizeof(int));
 
   for (int i = 0; i < 10; ++i) {
     PUSH_BACK_INT_DA(array, i);
   }
   TEST_CHECK(size_DA(array) == 10);
-  erase_DA(array, 5, NULL);
+  erase_by_pos_DA(array, 5, NULL);
   TEST_CHECK(size_DA(array) == 9);
   TEST_CHECK(GET_INT_DA(array, 5) == 6);
-  erase_DA(array, 0, NULL);
+  erase_by_pos_DA(array, 0, NULL);
   TEST_CHECK(size_DA(array) == 8);
   TEST_CHECK(GET_INT_DA(array, 0) == 1);
-  erase_DA(array, size_DA(array) - 1, NULL);
+  erase_by_pos_DA(array, size_DA(array) - 1, NULL);
   TEST_CHECK(GET_INT_DA(array, size_DA(array) - 1) == 8);
   TEST_CHECK(size_DA(array) == 7);
 
@@ -172,6 +172,6 @@ TEST_LIST = {{"create_destroy", test_create_destroy},
              {"push_back", test_push_back},
              {"expand", test_expand},
              {"pop_back", test_pop_back},
-             {"insert", test_insert},
-             {"erase", test_erase},
+             {"insert", test_insert_by_pos},
+             {"erase", test_erase_by_pos},
              {NULL, NULL}};

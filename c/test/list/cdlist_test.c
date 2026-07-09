@@ -173,13 +173,13 @@ void test_find(void) {
   TEST_CHECK(isequal(back_CDL(list), f));
   f = find_CDL(list, 0);
   TEST_CHECK(isequal(front_CDL(list), f));
-  f = find_CDL(list, size_CDL(list));
+  f = find_CDL(list, size_CDL(list) - 1);
   TEST_CHECK(isequal(back_CDL(list), f));
 
   destroy_CDL(list, free_cb);
 }
 
-void test_insert(void) {
+void test_insert_by_pos(void) {
   CDList *list = newCDList();
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
@@ -188,7 +188,7 @@ void test_insert(void) {
 
   TEST_CHECK(size_CDL(list) == 10);
   Item *it1 = newItem(101);
-  insert_CDL(list, 5, (CDNode *)it1);
+  insert_by_pos_CDL(list, 5, (CDNode *)it1);
   TEST_CHECK(size_CDL(list) == 11);
 
   CDNode *cur = find_CDL(list, 5);
@@ -196,7 +196,7 @@ void test_insert(void) {
   TEST_CHECK(isequal(cur, (CDNode *)it1));
 
   Item *it2 = newItem(104);
-  insert_CDL(list, size_CDL(list), (CDNode *)it2);
+  insert_by_pos_CDL(list, size_CDL(list), (CDNode *)it2);
   TEST_CHECK(size_CDL(list) == 12);
 
   cur = find_CDL(list, size_CDL(list) - 1);
@@ -204,7 +204,7 @@ void test_insert(void) {
   TEST_CHECK(isequal(cur, (CDNode *)it2));
 
   Item *it3 = newItem(108);
-  insert_CDL(list, 0, (CDNode *)it3);
+  insert_by_pos_CDL(list, 0, (CDNode *)it3);
   TEST_CHECK(size_CDL(list) == 13);
 
   cur = front_CDL(list);
@@ -213,7 +213,7 @@ void test_insert(void) {
   destroy_CDL(list, free_cb);
 }
 
-void test_erase(void) {
+void test_erase_by_pos(void) {
   CDList *list = newCDList();
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
@@ -225,21 +225,21 @@ void test_erase(void) {
   TEST_CHECK(it1->val == 5);
 
   Item *next = (Item *)it1->node.next;
-  erase_CDL(list, 5, free_cb);
+  erase_by_pos_CDL(list, 5, free_cb);
   TEST_CHECK(next->val == 6);
   TEST_CHECK(size_CDL(list) == 9);
 
   it1 = (Item *)front_CDL(list);
   TEST_CHECK(it1->val == 0);
   next = (Item *)it1->node.next;
-  erase_CDL(list, 0, free_cb);
+  erase_by_pos_CDL(list, 0, free_cb);
   TEST_CHECK(next->val == 1);
   TEST_CHECK(size_CDL(list) == 8);
 
   it1 = (Item *)back_CDL(list);
   TEST_CHECK(it1->val == 9);
   Item *pre = (Item *)find_CDL(list, size_CDL(list) - 2);
-  erase_CDL(list, size_CDL(list) - 1, free_cb);
+  erase_by_pos_CDL(list, size_CDL(list) - 1, free_cb);
   TEST_CHECK(pre->val == 8);
   TEST_CHECK(size_CDL(list) == 7);
 
@@ -288,8 +288,8 @@ TEST_LIST = {
     {"pop_back", test_pop_back},
     {"pop_front", test_pop_front},
     {"find", test_find},
-    {"insert", test_insert},
-    {"erase", test_erase},
+    {"insert", test_insert_by_pos},
+    {"erase", test_erase_by_pos},
     {"reverse", test_reverse},
     {NULL, NULL},
 };

@@ -28,8 +28,12 @@ void push_front_CL(CList *list, CNode *node);
 CNode *pop_back_CL(CList *list);
 CNode *pop_front_CL(CList *list);
 
-CNode* find_CL(CList* list, int pos);
-void insert_CL(CList* list, int pos, CNode* node);
-void erase_CL(CList* list, int pos, void (* free_cb)(CNode* node));
-void reverse_CL(CList* list);
+CNode *find_CL(CList *list, int pos);
+void reverse_CL(CList *list);
+void insert_CL(CList *list, CNode *pre, CNode *node);
+void erase_CL(CList *list, CNode *pre, void (*free_cb)(CNode *node));
+
+void insert_by_pos_CL(CList *list, int pos, CNode *node);
+void erase_by_pos_CL(CList *list, int pos, void (*free_cb)(CNode *node));
+
 #endif

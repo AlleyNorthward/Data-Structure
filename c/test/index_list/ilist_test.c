@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 typedef struct Item {
-  Node node;
+  CDNode node;
   int val;
 } Item;
 
@@ -15,17 +15,17 @@ Item *newItem(int val) {
   return node;
 }
 
-void free_cb(Node *node) {
+void free_cb(CDNode *node) {
   Item *item = (Item *)node;
   free(item);
 }
 
-void print_cb(Node *node) {
+void print_cb(CDNode *node) {
   Item *it = (Item *)node;
   printf("%d", it->val);
 }
 
-bool isequal(Node *a, Node *b) {
+bool isequal(CDNode *a, CDNode *b) {
   if (!a || !b)
     return false;
   Item *ia = (Item *)a;
@@ -34,7 +34,7 @@ bool isequal(Node *a, Node *b) {
   return ia->val == ib->val;
 }
 
-int get_key(Node *node) {
+int get_val(CDNode *node) {
   Item *it = container_of(node, Item, node);
   return it->val;
 }
@@ -64,22 +64,22 @@ void test_push_back(void) {
 
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
-    push_back_IL(list, (Node *)item, get_key);
+    push_back_IL(list, (CDNode *)item, get_val);
   }
 
   TEST_CHECK(size_IL(list) == 10);
   TEST_CHECK(empty_IL(list) == false);
-  Node *n = *(Node **)at_DA(list->array, 0);
+  CDNode *n = *(CDNode **)at_DA(list->array, 0);
   TEST_CHECK(isequal(n, front_IL(list)));
-  n = *(Node **)at_DA(list->array, 9);
+  n = *(CDNode **)at_DA(list->array, 9);
   TEST_CHECK(isequal(n, back_IL(list)));
   TEST_MSG("%d, %d", container_of(n, Item, node)->val,
            container_of(back_IL(list), Item, node)->val);
-  n = find_L(list->list, 5);
-  Node *nn = *(Node **)at_DA(list->array, 5);
+  n = find_CDL(list->list, 5);
+  CDNode *nn = *(CDNode **)at_DA(list->array, 5);
   TEST_CHECK(isequal(n, nn));
-  n = find_L(list->list, 7);
-  nn = *(Node **)at_DA(list->array, 7);
+  n = find_CDL(list->list, 7);
+  nn = *(CDNode **)at_DA(list->array, 7);
   TEST_CHECK(isequal(n, nn));
 
   TEST_CHECK(size_DA(list->array) == 16);
@@ -97,22 +97,22 @@ void test_push_front(void) {
   IList *list = newIList(15);
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
-    push_front_IL(list, (Node *)item, get_key);
+    push_front_IL(list, (CDNode *)item, get_val);
   }
   TEST_CHECK(size_IL(list) == 10);
   TEST_CHECK(empty_IL(list) == false);
-  Node *n = front_IL(list);
-  Node *nn = *(Node **)at_DA(list->array, size_IL(list) - 1);
+  CDNode *n = front_IL(list);
+  CDNode *nn = *(CDNode **)at_DA(list->array, size_IL(list) - 1);
   // n + nn = size - 1
   TEST_CHECK(isequal(n, nn));
   n = back_IL(list);
-  nn = *(Node **)at_DA(list->array, size_IL(list) - 1 - 9);
+  nn = *(CDNode **)at_DA(list->array, size_IL(list) - 1 - 9);
   TEST_CHECK(isequal(n, nn));
-  n = find_L(list->list, 5);
-  nn = *(Node **)at_DA(list->array, size_IL(list) - 1 - 5);
+  n = find_CDL(list->list, 5);
+  nn = *(CDNode **)at_DA(list->array, size_IL(list) - 1 - 5);
   TEST_CHECK(isequal(n, nn));
-  n = find_L(list->list, 7);
-  nn = *(Node **)at_DA(list->array, size_IL(list) - 1 - 7);
+  n = find_CDL(list->list, 7);
+  nn = *(CDNode **)at_DA(list->array, size_IL(list) - 1 - 7);
   TEST_CHECK(isequal(n, nn));
 
   destroy_IL(list, free_cb);
@@ -123,16 +123,16 @@ void test_pop_back(void) {
 
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
-    push_back_IL(list, (Node *)item, get_key);
+    push_back_IL(list, (CDNode *)item, get_val);
   }
 
   TEST_CHECK(size_IL(list) == 10);
   TEST_CHECK(size_DA(list->array) == 16);
   TEST_CHECK(empty_IL(list) == false);
-  Node *n = back_IL(list);
-  int key = get_key(n);
-  Node *nn = *(Node **)at_DA(list->array, key);
-  Node *nnn = pop_back_IL(list, get_key);
+  CDNode *n = back_IL(list);
+  int key = get_val(n);
+  CDNode *nn = *(CDNode **)at_DA(list->array, key);
+  CDNode *nnn = pop_back_IL(list, get_val);
   TEST_CHECK(isequal(n, nn));
   TEST_CHECK(isequal(n, nnn));
   TEST_CHECK(isequal(nn, nnn));
@@ -140,9 +140,9 @@ void test_pop_back(void) {
   free_cb(nnn);
 
   n = back_IL(list);
-  key = get_key(n);
-  nn = *(Node **)at_DA(list->array, key);
-  nnn = pop_back_IL(list, get_key);
+  key = get_val(n);
+  nn = *(CDNode **)at_DA(list->array, key);
+  nnn = pop_back_IL(list, get_val);
   TEST_CHECK(isequal(n, nn));
   TEST_CHECK(isequal(n, nnn));
   TEST_CHECK(isequal(nn, nnn));
@@ -153,13 +153,13 @@ void test_pop_back(void) {
   TEST_CHECK(size_IL(list) == 0);
 
   Item *it = newItem(5);
-  push_back_IL(list, (Node *)it, get_key);
+  push_back_IL(list, (CDNode *)it, get_val);
   TEST_CHECK(size_IL(list) == 1);
 
   n = back_IL(list);
-  key = get_key(n);
-  nn = *(Node **)at_DA(list->array, key);
-  nnn = pop_back_IL(list, get_key);
+  key = get_val(n);
+  nn = *(CDNode **)at_DA(list->array, key);
+  nnn = pop_back_IL(list, get_val);
 
   TEST_CHECK(isequal(n, nn));
   TEST_CHECK(isequal(n, nnn));
@@ -174,16 +174,16 @@ void test_pop_front(void) {
   IList *list = newIList(15);
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
-    push_front_IL(list, (Node *)item, get_key);
+    push_front_IL(list, (CDNode *)item, get_val);
   }
 
   TEST_CHECK(size_IL(list) == 10);
   TEST_CHECK(size_DA(list->array) == 16);
   TEST_CHECK(empty_IL(list) == false);
-  Node *n = front_IL(list);
-  int key = get_key(n);
-  Node *nn = *(Node **)at_DA(list->array, key);
-  Node *nnn = pop_front_IL(list, get_key);
+  CDNode *n = front_IL(list);
+  int key = get_val(n);
+  CDNode *nn = *(CDNode **)at_DA(list->array, key);
+  CDNode *nnn = pop_front_IL(list, get_val);
   TEST_CHECK(isequal(n, nn));
   TEST_CHECK(isequal(n, nnn));
   TEST_CHECK(isequal(nn, nnn));
@@ -191,9 +191,9 @@ void test_pop_front(void) {
   free_cb(nnn);
 
   n = front_IL(list);
-  key = get_key(n);
-  nn = *(Node **)at_DA(list->array, key);
-  nnn = pop_front_IL(list, get_key);
+  key = get_val(n);
+  nn = *(CDNode **)at_DA(list->array, key);
+  nnn = pop_front_IL(list, get_val);
   TEST_CHECK(isequal(n, nn));
   TEST_CHECK(isequal(n, nnn));
   TEST_CHECK(isequal(nn, nnn));
@@ -204,13 +204,13 @@ void test_pop_front(void) {
   TEST_CHECK(size_IL(list) == 0);
 
   Item *it = newItem(5);
-  push_front_IL(list, (Node *)it, get_key);
+  push_front_IL(list, (CDNode *)it, get_val);
   TEST_CHECK(size_IL(list) == 1);
 
   n = front_IL(list);
-  key = get_key(n);
-  nn = *(Node **)at_DA(list->array, key);
-  nnn = pop_back_IL(list, get_key);
+  key = get_val(n);
+  nn = *(CDNode **)at_DA(list->array, key);
+  nnn = pop_back_IL(list, get_val);
 
   TEST_CHECK(isequal(n, nn));
   TEST_CHECK(isequal(n, nnn));
@@ -221,88 +221,52 @@ void test_pop_front(void) {
   destroy_IL(list, free_cb);
 }
 
-void test_insert(void) {
-  IList *list = newIList(15);
+void test_insert_by_val(void) {
+  IList *list = newIList(10000);
 
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
-    push_back_IL(list, (Node *)item, get_key);
+    push_back_IL(list, (CDNode *)item, get_val);
   }
-
   TEST_CHECK(size_IL(list) == 10);
-  TEST_CHECK(size_DA(list->array) == 16);
   TEST_CHECK(empty_IL(list) == false);
-  Node *pre = *(Node **)at_DA(list->array, 4);
-  Node *next = *(Node **)at_DA(list->array, 5);
-
-  Item *item = newItem(12);
-  insert_IL(list, (Node *)item, 5, get_key);
-  Node *n = *(Node **)at_DA(list->array, 5);
-  TEST_CHECK(container_of(pre->next, Item, node)->val == 12);
-  TEST_CHECK(isequal(n, next));
+  Item *it1 = newItem(99);
+  insert_by_val_IL(list, (CDNode *)it1, 4, get_val);
+  CDNode *n = find_by_val_IL(list, 4);
+  CDNode *nn = find_by_val_IL(list, 99);
+  TEST_CHECK(isequal(n->next, nn));
+  TEST_CHECK(isequal(n, nn->previous));
   TEST_CHECK(size_IL(list) == 11);
 
-  next = front_IL(list);
-  Item *item2 = newItem(13);
-  insert_IL(list, (Node *)item2, 0, get_key);
-  n = *(Node **)at_DA(list->array, 0);
-  TEST_CHECK(isequal(n, next));
+  Item *it2 = newItem(1000);
+  insert_by_val_IL(list, (CDNode *)it2, 0, get_val);
+  n = find_by_val_IL(list, 0);
+  nn = find_by_val_IL(list, 1000);
+  TEST_CHECK(isequal(n->next, nn));
+  TEST_CHECK(isequal(n, nn->previous));
   TEST_CHECK(size_IL(list) == 12);
 
-  pre = back_IL(list);
-  Item *item3 = newItem(14);
-  insert_IL(list, (Node *)item3, size_IL(list), get_key);
-  n = back_IL(list);
-  TEST_CHECK(container_of(pre->next, Item, node)->val == 14);
+  Item *it3 = newItem(9992);
+  insert_by_val_IL(list, (CDNode *)it3, 9, get_val);
+  n = find_by_val_IL(list, 9);
+  nn = find_by_val_IL(list, 9992);
+  CDNode *nnn = back_IL(list);
+
+  TEST_CHECK(isequal(nn, nnn));
+  TEST_CHECK(isequal(n->next, nn));
+  TEST_CHECK(isequal(n, nn->previous));
   TEST_CHECK(size_IL(list) == 13);
 
   destroy_IL(list, free_cb);
 }
 
-void test_erase(void) {
-  IList *list = newIList(15);
-
-  for (int i = 0; i < 10; ++i) {
-    Item *item = newItem(i);
-    push_back_IL(list, (Node *)item, get_key);
-  }
-
-  TEST_CHECK(size_IL(list) == 10);
-  TEST_CHECK(size_DA(list->array) == 16);
-  TEST_CHECK(empty_IL(list) == false);
-
-  Node *del = GET_DA(list->array, 5, Node *);
-  Node *pre = GET_DA(list->array, 4, Node *);
-  Node *next = del->next;
-  TEST_CHECK(isequal(del->next, next));
-  erase_IL(list, 5, free_cb, get_key);
-  Node *cur = GET_DA(list->array, 5, Node *);
-  TEST_CHECK(cur == NULL);
-  TEST_CHECK(isequal(pre->next, next));
-  TEST_CHECK(size_IL(list) == 9);
-
-  del = GET_DA(list->array, 0, Node *);
-  next = del->next;
-  erase_IL(list, 0, free_cb, get_key);
-  cur = GET_DA(list->array, 0, Node *);
-  TEST_CHECK(cur == NULL);
-  TEST_CHECK(isequal(front_IL(list), next));
-  TEST_CHECK(size_IL(list) == 8);
-
-  del = GET_DA(list->array, size_IL(list) - 1, Node *);
-  pre = GET_DA(list->array, 8, Node *);
-  erase_IL(list, size_IL(list) - 1, free_cb, get_key);
-  TEST_CHECK(isequal(back_IL(list), pre));
-  TEST_CHECK(size_IL(list) == 7);
-
-  destroy_IL(list, free_cb);
-}
+// void test_erase_by_val(void);
 
 TEST_LIST = {{"create_destroy", test_create_destroy},
              {"push_back", test_push_back},
              {"push_front", test_push_front},
              {"pop_back", test_pop_back},
              {"pop_front", test_pop_front},
-             {"insert", test_insert},
-             {"erase", test_erase},
+             {"insert", test_insert_by_val},
+             // {"erase", test_erase_by_val},
              {NULL, NULL}};

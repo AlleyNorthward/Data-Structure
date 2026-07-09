@@ -113,7 +113,7 @@ void *pop_back_DA(DArray *arr) {
   return at_DA(arr, size_DA(arr));
 }
 
-void insert_DA(DArray *arr, int pos, void *elem) {
+void insert_by_pos_DA(DArray *arr, int pos, void *elem) {
   if (arr == NULL || elem == NULL || pos < 0 || pos > size_DA(arr))
     return;
 
@@ -132,7 +132,7 @@ void insert_DA(DArray *arr, int pos, void *elem) {
   ++arr->len;
 }
 
-void erase_DA(DArray *arr, int pos, void (*free_cb)(void *elem)) {
+void erase_by_pos_DA(DArray *arr, int pos, void (*free_cb)(void *elem)) {
   if (arr == NULL || pos >= size_DA(arr))
     return;
 

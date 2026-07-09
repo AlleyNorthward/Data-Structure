@@ -155,61 +155,6 @@ CNode *pop_front_CL(CList *list) {
   return del;
 }
 
-void insert_CL(CList *list, int pos, CNode *node) {
-  if (list == NULL || node == NULL || pos < 0 || pos > size_CL(list))
-    return;
-
-  if (pos == 0) {
-    push_front_CL(list, node);
-    return;
-  }
-
-  if (pos == size_CL(list)) {
-    push_back_CL(list, node);
-    return;
-  }
-
-  CNode *cur = list->head;
-  for (int i = 0; i < pos - 1; ++i) {
-    cur = cur->next;
-  }
-
-  node->next = cur->next;
-  cur->next = node;
-  ++list->len;
-}
-
-void erase_CL(CList *list, int pos, void (*free_cb)(CNode *node)) {
-  if (list == NULL || pos < 0 || pos > size_CL(list) - 1)
-    return;
-
-  if (pos == 0) {
-    CNode *node = pop_front_CL(list);
-    if (free_cb != NULL)
-      free_cb(node);
-    return;
-  }
-
-  if (pos == size_CL(list) - 1) {
-    CNode *node = pop_back_CL(list);
-    if (free_cb != NULL)
-      free_cb(node);
-    return;
-  }
-
-  CNode *cur = list->head;
-  for (int i = 0; i < pos - 1; ++i) {
-    cur = cur->next;
-  }
-
-  CNode *del = cur->next;
-  cur->next = del->next;
-  del->next = NULL;
-  --list->len;
-  if (free_cb != NULL)
-    free_cb(del);
-}
-
 void reverse_CL(CList *list) {
   if (list == NULL || empty_CL(list) || size_CL(list) == 1)
     return;
@@ -229,28 +174,74 @@ void reverse_CL(CList *list) {
   list->head = pre;
 }
 
-CNode* find_CL(CList* list, int pos){
-  if(list == NULL || pos < 0 || pos > size_CL(list))
+CNode *find_CL(CList *list, int pos) {
+  if (list == NULL || pos < 0 || pos >= size_CL(list))
     return NULL;
 
-  if(pos == size_CL(list))
-    pos = pos - 1;
-
-  CNode* cur = front_CL(list);
-  for(int i = 0; i < pos; ++i){
+  CNode *cur = front_CL(list);
+  for (int i = 0; i < pos; ++i) {
     cur = cur->next;
   }
 
   return cur;
 }
 
+void insert_CL(CList *list, CNode *pre, CNode *node) {
+  if (list == NULL || node == NULL)
+    return;
 
+  if (pre == NULL) {
+    push_front_CL(list, node);
+    return;
+  }
 
+  if (pre == back_CL(list)) {
+    push_back_CL(list, node);
+    return;
+  }
 
+  node->next = pre->next;
+  pre->next = node;
+  ++list->len;
+}
 
+void erase_CL(CList *list, CNode *pre, void (*free_cb)(CNode *node)) {
+  if (list == NULL)
+    return;
 
+  CNode *del = NULL;
+  if (pre == NULL) {
+    del = pop_front_CL(list);
+    if (free_cb)
+      free_cb(del);
+    return;
+  }
 
+  if (pre->next == back_CL(list)) {
+    del = pop_back_CL(list);
+    if (free_cb)
+      free_cb(del);
+    return;
+  }
 
+  del = pre->next;
+  pre->next = del->next;
+  if (free_cb)
+    free_cb(del);
+  --list->len;
+}
 
+void insert_by_pos_CL(CList *list, int pos, CNode *node) {
+  if (list == NULL || node == NULL || pos < 0 || pos > size_CL(list))
+    return;
+  CNode *pre = find_CL(list, pos - 1);
+  insert_CL(list, pre, node);
+}
 
+void erase_by_pos_CL(CList *list, int pos, void (*free_cb)(CNode *node)) {
+  if (list == NULL || pos < 0 || pos >= size_CL(list))
+    return;
 
+  CNode *pre = find_CL(list, pos - 1);
+  erase_CL(list, pre, free_cb);
+}

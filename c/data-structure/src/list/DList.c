@@ -157,63 +157,6 @@ void print_DL(DList *list, void (*print_cb)(DNode *node)) {
   putchar('\n');
 }
 
-void insert_DL(DList *list, int pos, DNode *node) {
-  if (list == NULL || node == NULL || pos < 0 || pos > size_DL(list))
-    return;
-
-  if (pos == 0) {
-    push_front_DL(list, node);
-    return;
-  }
-
-  if (pos == size_DL(list)) {
-    push_back_DL(list, node);
-    return;
-  }
-
-  DNode *cur = list->head;
-  for (int i = 0; i < pos - 1; ++i) {
-    cur = cur->next;
-  }
-
-  node->next = cur->next;
-  node->previous = cur;
-
-  cur->next = node;
-  cur->next->previous = node;
-
-  ++list->len;
-}
-
-void erase_DL(DList *list, int pos, void (*free_cb)(DNode *node)) {
-  if (list == NULL || pos < 0 || pos > size_DL(list) - 1 || empty_DL(list))
-    return;
-
-  if (pos == 0) {
-    pop_front_DL(list);
-    return;
-  }
-
-  if (pos == size_DL(list) - 1) {
-    pop_back_DL(list);
-    return;
-  }
-
-  DNode *cur = list->head;
-  for (int i = 0; i < pos - 1; ++i) {
-    cur = cur->next;
-  }
-
-  DNode *del = cur->next;
-  cur->next = del->next;
-  del->next->previous = cur;
-
-  del->next = NULL;
-  del->previous = NULL;
-  --list->len;
-  free_cb(del);
-}
-
 void reverse_DL(DList *list) {
   if (list == NULL || empty_DL(list))
     return;
@@ -238,17 +181,84 @@ void reverse_DL(DList *list) {
   list->tail = pre;
 }
 
-DNode* find_DL(DList* list, int pos){
-  if(list == NULL || pos < 0 || pos > size_DL(list))
+DNode *find_DL(DList *list, int pos) {
+  if (list == NULL || pos < 0 || pos >= size_DL(list))
     return NULL;
 
-  if(pos == size_DL(list))
-    pos = pos - 1;
-
-  DNode* cur = front_DL(list);
-  for(int i = 0; i < pos; ++i){
+  DNode *cur = front_DL(list);
+  for (int i = 0; i < pos; ++i) {
     cur = cur->next;
   }
 
   return cur;
+}
+
+void insert_DL(DList *list, DNode *pre, DNode *node) {
+  if (list == NULL || node == NULL)
+    return;
+
+  if (pre == NULL) {
+    push_front_DL(list, node);
+    return;
+  }
+
+  if (pre == back_DL(list)) {
+    push_back_DL(list, node);
+    return;
+  }
+
+  DNode *next = pre->next;
+  node->next = next;
+  next->previous = node;
+  pre->next = node;
+  node->previous = pre;
+
+  ++list->len;
+}
+
+void erase_DL(DList *list, DNode *node, void (*free_cb)(DNode *node)) {
+  if (list == NULL || node == NULL)
+    return;
+  DNode *del = NULL;
+  if (node == front_DL(list)) {
+    del = pop_front_DL(list);
+    if (free_cb)
+      free_cb(del);
+    return;
+  }
+
+  if (node == back_DL(list)) {
+    del = pop_back_DL(list);
+    if (free_cb)
+      free_cb(del);
+    return;
+  }
+
+  del = node;
+  DNode *pre = del->previous;
+  DNode *next = del->next;
+  pre->next = next;
+  next->previous = pre;
+
+  del->next = NULL;
+  del->previous = NULL;
+
+  if (free_cb)
+    free_cb(del);
+  --list->len;
+}
+
+void insert_by_pos_DL(DList *list, int pos, DNode *node) {
+  if (list == NULL || node == NULL || pos < 0 || pos > size_DL(list))
+    return;
+  DNode *pre = find_DL(list, pos - 1);
+  insert_DL(list, pre, node);
+}
+
+void erase_by_pos_DL(DList *list, int pos, void (*free_cb)(DNode *node)) {
+  // pos [0, size)
+  if (list == NULL || pos < 0 || pos >= size_DL(list) || empty_DL(list))
+    return;
+  DNode *del = find_DL(list, pos);
+  erase_DL(list, del, free_cb);
 }

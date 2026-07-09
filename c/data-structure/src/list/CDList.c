@@ -174,69 +174,6 @@ CDNode *pop_front_CDL(CDList *list) {
   return del;
 }
 
-void insert_CDL(CDList *list, int pos, CDNode *node) {
-  if (list == NULL || node == NULL || pos < 0 || pos > size_CDL(list))
-    return;
-
-  if (pos == 0) {
-    push_front_CDL(list, node);
-    return;
-  }
-
-  if (pos == size_CDL(list)) {
-    push_back_CDL(list, node);
-    return;
-  }
-
-  CDNode *cur = list->head;
-  for (int i = 0; i < pos - 1; ++i) {
-    cur = cur->next;
-  }
-
-  node->next = cur->next;
-  node->previous = cur;
-  cur->next = node;
-  cur->next->previous = node;
-  ++list->len;
-}
-
-void erase_CDL(CDList *list, int pos, void (*free_cb)(CDNode *node)) {
-  if (list == NULL || empty_CDL(list) || pos < 0 || pos > size_CDL(list) - 1)
-    return;
-
-  if (pos == 0) {
-    CDNode *node = pop_front_CDL(list);
-    if (free_cb != NULL)
-      free_cb(node);
-    return;
-  }
-
-  if (pos == size_CDL(list) - 1) {
-    CDNode *node = pop_back_CDL(list);
-    if (free_cb != NULL)
-      free_cb(node);
-
-    return;
-  }
-
-  CDNode *cur = list->head;
-  for (int i = 0; i < pos - 1; ++i) {
-    cur = cur->next;
-  }
-
-  CDNode *del = cur->next;
-  CDNode *next = del->next;
-  cur->next = next;
-  next->previous = cur;
-
-  del->next = NULL;
-  del->previous = NULL;
-  --list->len;
-
-  if (!free_cb)
-    free_cb(del);
-}
-
 void reverse_CDL(CDList *list) {
   if (list == NULL || empty_CDL(list))
     return;
@@ -261,11 +198,8 @@ void reverse_CDL(CDList *list) {
 }
 
 CDNode *find_CDL(CDList *list, int pos) {
-  if (list == NULL || pos < 0 || pos > size_CDL(list))
+  if (list == NULL || pos < 0 || pos >= size_CDL(list))
     return NULL;
-
-  if (pos == size_CDL(list))
-    pos = pos - 1;
 
   CDNode *cur = front_CDL(list);
   for (int i = 0; i < pos; ++i) {
@@ -273,4 +207,75 @@ CDNode *find_CDL(CDList *list, int pos) {
   }
 
   return cur;
+}
+
+void insert_CDL(CDList *list, CDNode *pre, CDNode *node) {
+  if (list == NULL || node == NULL)
+    return;
+
+  if (pre == NULL) {
+    push_front_CDL(list, node);
+    return;
+  }
+
+  if (pre == back_CDL(list)) {
+    push_back_CDL(list, node);
+    return;
+  }
+
+  CDNode *next = pre->next;
+  node->next = next;
+  next->previous = node;
+  pre->next = node;
+  node->previous = pre;
+
+  ++list->len;
+}
+
+void erase_CDL(CDList *list, CDNode *node, void (*free_cb)(CDNode *node)) {
+  if (list == NULL || node == NULL)
+    return;
+
+  CDNode *del = NULL;
+  if (node == front_CDL(list)) {
+    del = pop_front_CDL(list);
+    if (free_cb)
+      free_cb(del);
+    return;
+  }
+
+  if (node == back_CDL(list)) {
+    del = pop_back_CDL(list);
+    if (free_cb)
+      free_cb(del);
+    return;
+  }
+
+  del = node;
+  CDNode *pre = del->previous;
+  CDNode *next = del->next;
+
+  pre->next = next;
+  next->previous = pre;
+
+  del->previous = NULL;
+  del->next = NULL;
+  if (free_cb)
+    free_cb(del);
+  --list->len;
+}
+
+void insert_by_pos_CDL(CDList *list, int pos, CDNode *node) {
+  if (list == NULL || node == NULL || pos < 0 || pos > size_CDL(list))
+    return;
+  CDNode *pre = find_CDL(list, pos - 1);
+  insert_CDL(list, pre, node);
+}
+
+void erase_by_pos_CDL(CDList *list, int pos, void (*free_cb)(CDNode *node)) {
+  if (list == NULL || empty_CDL(list) || pos < 0 || pos >= size_CDL(list))
+    return;
+
+  CDNode *del = find_CDL(list, pos);
+  erase_CDL(list, del, free_cb);
 }

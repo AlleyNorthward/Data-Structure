@@ -30,8 +30,11 @@ CDNode *pop_back_CDL(CDList *list);
 CDNode *pop_front_CDL(CDList *list);
 
 CDNode* find_CDL(CDList* list, int pos);
-void insert_CDL(CDList *list, int pos, CDNode *node);
-void erase_CDL(CDList *list, int pos, void (*free_cb)(CDNode *node));
 void reverse_CDL(CDList *list);
+void insert_CDL(CDList* list, CDNode* pre, CDNode* node);
+void erase_CDL(CDList* list, CDNode* node, void(*free_cb)(CDNode* node));
+
+void insert_by_pos_CDL(CDList *list, int pos, CDNode *node);
+void erase_by_pos_CDL(CDList *list, int pos, void (*free_cb)(CDNode *node));
 
 #endif

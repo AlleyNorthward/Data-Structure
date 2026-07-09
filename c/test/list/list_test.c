@@ -173,13 +173,13 @@ void test_find(void) {
   TEST_CHECK(isequal(back_L(list), f));
   f = find_L(list, 0);
   TEST_CHECK(isequal(front_L(list), f));
-  f = find_L(list, size_L(list));
+  f = find_L(list, size_L(list) - 1);
   TEST_CHECK(isequal(back_L(list), f));
 
   destroy_L(list, free_cb);
 }
 
-void test_insert(void) {
+void test_insert_by_pos(void) {
   List *list = newList();
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
@@ -188,7 +188,7 @@ void test_insert(void) {
 
   TEST_CHECK(size_L(list) == 10);
   Item *it1 = newItem(101);
-  insert_L(list, 5, (Node *)it1);
+  insert_by_pos_L(list, 5, (Node *)it1);
   TEST_CHECK(size_L(list) == 11);
 
   Node *cur = find_L(list, 5);
@@ -196,7 +196,7 @@ void test_insert(void) {
   TEST_CHECK(isequal(cur, (Node *)it1));
 
   Item *it2 = newItem(104);
-  insert_L(list, size_L(list), (Node *)it2);
+  insert_by_pos_L(list, size_L(list), (Node *)it2);
   TEST_CHECK(size_L(list) == 12);
 
   cur = find_L(list, size_L(list) - 1);
@@ -204,7 +204,7 @@ void test_insert(void) {
   TEST_CHECK(isequal(cur, (Node *)it2));
 
   Item *it3 = newItem(108);
-  insert_L(list, 0, (Node *)it3);
+  insert_by_pos_L(list, 0, (Node *)it3);
   TEST_CHECK(size_L(list) == 13);
 
   cur = front_L(list);
@@ -213,7 +213,7 @@ void test_insert(void) {
   destroy_L(list, free_cb);
 }
 
-void test_erase(void) {
+void test_erase_by_pos(void) {
   List *list = newList();
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
@@ -225,21 +225,21 @@ void test_erase(void) {
   TEST_CHECK(it1->val == 5);
 
   Item *next = (Item *)it1->node.next;
-  erase_L(list, 5, free_cb);
+  erase_by_pos_L(list, 5, free_cb);
   TEST_CHECK(next->val == 6);
   TEST_CHECK(size_L(list) == 9);
 
   it1 = (Item *)front_L(list);
   TEST_CHECK(it1->val == 0);
   next = (Item *)it1->node.next;
-  erase_L(list, 0, free_cb);
+  erase_by_pos_L(list, 0, free_cb);
   TEST_CHECK(next->val == 1);
   TEST_CHECK(size_L(list) == 8);
 
   it1 = (Item *)back_L(list);
   TEST_CHECK(it1->val == 9);
   Item *pre = (Item *)find_L(list, size_L(list) - 2);
-  erase_L(list, size_L(list) - 1, free_cb);
+  erase_by_pos_L(list, size_L(list) - 1, free_cb);
   TEST_CHECK(pre->val == 8);
   TEST_CHECK(size_L(list) == 7);
 
@@ -288,8 +288,8 @@ TEST_LIST = {
     {"pop_back", test_pop_back},
     {"pop_front", test_pop_front},
     {"find", test_find},
-    {"insert", test_insert},
-    {"erase", test_erase},
+    {"insert", test_insert_by_pos},
+    {"erase", test_erase_by_pos},
     {"reverse", test_reverse},
     {NULL, NULL},
 };

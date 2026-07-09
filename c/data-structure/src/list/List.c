@@ -155,11 +155,8 @@ void print_L(List *list, void (*print_cb)(Node *node)) {
 
 Node *find_L(List *list, int pos) {
   // pos [0, size);
-  if (list == NULL || pos < 0 || pos > size_L(list))
+  if (list == NULL || pos < 0 || pos >= size_L(list))
     return NULL;
-
-  if (pos == size_L(list))
-    pos = size_L(list) - 1;
 
   Node *cur = list->head;
 
@@ -170,53 +167,20 @@ Node *find_L(List *list, int pos) {
   return cur;
 }
 
-void insert_L(List *list, int pos, Node *node) {
+void insert_by_pos_L(List *list, int pos, Node *node) {
   if (list == NULL || node == NULL || pos < 0 || pos > size_L(list))
     return;
 
-  if (pos == 0) {
-    push_front_L(list, node);
-    return;
-  }
-
-  if (pos == size_L(list)) {
-    push_back_L(list, node);
-    return;
-  }
-
-  Node *cur = find_L(list, pos - 1);
-
-  node->next = cur->next;
-  cur->next = node;
-  ++list->len;
+  Node *pre = find_L(list, pos - 1);
+  insert_L(list, pre, node);
 }
 
-void erase_L(List *list, int pos, void (*free_cb)(Node *node)) {
-  if (list == NULL || pos < 0 || pos > size_L(list) - 1)
+void erase_by_pos_L(List *list, int pos, void (*free_cb)(Node *node)) {
+  if (list == NULL || pos < 0 || pos >= size_L(list))
     return;
 
-  if (pos == 0) {
-    Node *del = pop_front_L(list);
-    if (free_cb != NULL && del != NULL)
-      free_cb(del);
-    return;
-  }
-
-  if (pos == size_L(list) - 1) {
-    Node *del = pop_back_L(list);
-    if (free_cb != NULL && del != NULL)
-      free_cb(del);
-    return;
-  }
-
-  Node *cur = find_L(list, pos - 1);
-
-  Node *del = cur->next;
-  cur->next = del->next;
-  del->next = NULL;
-  if (free_cb != NULL)
-    free_cb(del);
-  --list->len;
+  Node *pre = find_L(list, pos - 1);
+  erase_L(list, pre, free_cb);
 }
 
 void reverse_L(List *list) {
@@ -239,4 +203,51 @@ void reverse_L(List *list) {
 
   list->tail = list->head;
   list->head = pre;
+}
+
+void insert_L(List *list, Node *pre, Node *node) {
+  if (list == NULL || node == NULL)
+    return;
+
+  if (pre == NULL) {
+    push_front_L(list, node);
+    return;
+  }
+
+  if (pre == list->tail) {
+    push_back_L(list, node);
+    return;
+  }
+
+  Node *next = pre->next;
+  node->next = next;
+  pre->next = node;
+  ++list->len;
+}
+
+void erase_L(List *list, Node *pre, void (*free_cb)(Node *node)) {
+  if (list == NULL)
+    return;
+
+  Node *del = NULL;
+  if (pre == NULL) {
+    del = pop_front_L(list);
+    if (free_cb)
+      free_cb(del);
+    return;
+  }
+
+  if (pre->next == back_L(list)) {
+    del = pop_back_L(list);
+    if (free_cb)
+      free_cb(del);
+    return;
+  }
+
+  del = pre->next;
+  pre->next = del->next;
+  del->next = NULL;
+  if (free_cb)
+    free_cb(del);
+  --list->len;
 }

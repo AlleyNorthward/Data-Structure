@@ -16,8 +16,9 @@ Item *newItem(int val) {
 }
 
 void free_cb(CNode *node) {
-  Item* item = (Item*)node;
-  free(item); }
+  Item *item = (Item *)node;
+  free(item);
+}
 
 void print_cb(CNode *node) {
   Item *it = (Item *)node;
@@ -172,13 +173,13 @@ void test_find(void) {
   TEST_CHECK(isequal(back_CL(list), f));
   f = find_CL(list, 0);
   TEST_CHECK(isequal(front_CL(list), f));
-  f = find_CL(list, size_CL(list));
+  f = find_CL(list, size_CL(list) - 1);
   TEST_CHECK(isequal(back_CL(list), f));
 
   destroy_CL(list, free_cb);
 }
 
-void test_insert(void) {
+void test_insert_by_pos(void) {
   CList *list = newCList();
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
@@ -187,7 +188,7 @@ void test_insert(void) {
 
   TEST_CHECK(size_CL(list) == 10);
   Item *it1 = newItem(101);
-  insert_CL(list, 5, (CNode *)it1);
+  insert_by_pos_CL(list, 5, (CNode *)it1);
   TEST_CHECK(size_CL(list) == 11);
 
   CNode *cur = find_CL(list, 5);
@@ -195,7 +196,7 @@ void test_insert(void) {
   TEST_CHECK(isequal(cur, (CNode *)it1));
 
   Item *it2 = newItem(104);
-  insert_CL(list, size_CL(list), (CNode *)it2);
+  insert_by_pos_CL(list, size_CL(list), (CNode *)it2);
   TEST_CHECK(size_CL(list) == 12);
 
   cur = find_CL(list, size_CL(list) - 1);
@@ -203,7 +204,7 @@ void test_insert(void) {
   TEST_CHECK(isequal(cur, (CNode *)it2));
 
   Item *it3 = newItem(108);
-  insert_CL(list, 0, (CNode *)it3);
+  insert_by_pos_CL(list, 0, (CNode *)it3);
   TEST_CHECK(size_CL(list) == 13);
 
   cur = front_CL(list);
@@ -212,7 +213,7 @@ void test_insert(void) {
   destroy_CL(list, free_cb);
 }
 
-void test_erase(void) {
+void test_erase_by_pos(void) {
   CList *list = newCList();
   for (int i = 0; i < 10; ++i) {
     Item *item = newItem(i);
@@ -224,21 +225,21 @@ void test_erase(void) {
   TEST_CHECK(it1->val == 5);
 
   Item *next = (Item *)it1->node.next;
-  erase_CL(list, 5, free_cb);
+  erase_by_pos_CL(list, 5, free_cb);
   TEST_CHECK(next->val == 6);
   TEST_CHECK(size_CL(list) == 9);
 
   it1 = (Item *)front_CL(list);
   TEST_CHECK(it1->val == 0);
   next = (Item *)it1->node.next;
-  erase_CL(list, 0, free_cb);
+  erase_by_pos_CL(list, 0, free_cb);
   TEST_CHECK(next->val == 1);
   TEST_CHECK(size_CL(list) == 8);
 
   it1 = (Item *)back_CL(list);
   TEST_CHECK(it1->val == 9);
   Item *pre = (Item *)find_CL(list, size_CL(list) - 2);
-  erase_CL(list, size_CL(list) - 1, free_cb);
+  erase_by_pos_CL(list, size_CL(list) - 1, free_cb);
   TEST_CHECK(pre->val == 8);
   TEST_CHECK(size_CL(list) == 7);
 
@@ -287,8 +288,8 @@ TEST_LIST = {
     {"pop_back", test_pop_back},
     {"pop_front", test_pop_front},
     {"find", test_find},
-    {"insert", test_insert},
-    {"erase", test_erase},
+    {"insert", test_insert_by_pos},
+    {"erase", test_erase_by_pos},
     {"reverse", test_reverse},
     {NULL, NULL},
 };

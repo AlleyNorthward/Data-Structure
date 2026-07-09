@@ -29,8 +29,11 @@ Node *pop_back_L(List *list);
 Node *pop_front_L(List *list);
 
 Node *find_L(List *list, int pos);
-void insert_L(List *list, int pos, Node *node);
-void erase_L(List *list, int pos, void (*free_cb)(Node *node));
+void insert_L(List *list, Node *pre, Node *node);
+void erase_L(List *list, Node *pre, void (*free_cb)(Node *node));
 void reverse_L(List *list);
+
+void insert_by_pos_L(List *list, int pos, Node *node);
+void erase_by_pos_L(List *list, int pos, void (*free_cb)(Node *node));
 
 #endif
