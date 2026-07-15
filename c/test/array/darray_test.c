@@ -1,177 +1,393 @@
-#include "DArray.h"
+#include "array/DArray.h"
 #include "acutest.h"
-#include "config.h"
+#include <stdlib.h>
+#include <string.h>
+
+static int free_counter = 0;
+
+static void mock_free_cb(void *elem, void *args) {
+  (void)args;
+  char *ptr = *(char **)elem;
+  free(ptr);
+  free_counter++;
+}
 
 void test_create_destroy(void) {
-  DArray *array = newDArray(10, sizeof(int));
-  TEST_CHECK(empty_DA(array));
-  TEST_CHECK(size_DA(array) == 0);
-  TEST_CHECK(capacity_DA(array) == 10);
-  destroy_DA(array, NULL);
+  DArray *arr = newDArray(20, sizeof(int));
+  TEST_CHECK(arr != NULL);
+  TEST_CHECK(capacity_DA(arr) == 20);
+  TEST_CHECK(arr->elem_size == sizeof(int));
+  TEST_CHECK(size_DA(arr) == 0);
+  destroy_DA(arr, NULL, NULL);
 
-  array = newDArray(0, sizeof(int));
-  TEST_CHECK(capacity_DA(array) == 4);
+  arr = newDArray(0, sizeof(int));
+  TEST_CHECK(capacity_DA(arr) == 4);
+  destroy_DA(arr, NULL, NULL);
 
-  destroy_DA(array, NULL);
+  arr = newDArray(10, 0);
+  TEST_CHECK(arr == NULL);
 }
 
-void test_at(void) {
-  DArray *array = newDArray(10, sizeof(int));
-  for (int i = 0; i < 10; ++i) {
-    GET_INT_DA(array, i) = i;
-  }
-  TEST_CHECK(size_DA(array) == 10);
-  TEST_CHECK(empty_DA(array));
-  int a = GET_INT_DA(array, 0);
-  TEST_CHECK(a == 0);
-  a = GET_INT_DA(array, 5);
-  TEST_CHECK(a == 5);
-  a = GET_INT_DA(array, 9);
-  TEST_CHECK(a == 9);
-  a = *(int *)at_DA(array, 7);
-  TEST_CHECK(a == 7);
-  a = *(int *)at_DA(array, 0);
-  TEST_CHECK(a == 0);
-  a = *(int *)at_DA(array, 9);
-  TEST_CHECK(a == 9);
-  clear_DA(array, NULL);
-  TEST_CHECK(size_DA(array) == 0);
-  TEST_CHECK(empty_DA(array));
-  TEST_CHECK(capacity_DA(array) == 10);
+void test_set_get(void) {
+  DArray *arr = newDArray(10, sizeof(int));
+  TEST_CHECK(arr != NULL);
 
-  destroy_DA(array, NULL);
+  for (int i = 0; i < 10; i++) {
+    SET_DA(arr, i, i, int);
+    TEST_CHECK(GET_DA(arr, i, int) == i);
+  }
+  TEST_CHECK(size_DA(arr) == 10);
+
+  resize_DA(arr, 16);
+  SET_DA(arr, 15, 999, int);
+  TEST_CHECK(size_DA(arr) == 16);
+  TEST_CHECK(GET_DA(arr, 15, int) == 999);
+  for (int i = 10; i < 15; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == 0);
+  }
+
+  SET_DA(arr, 5, 555, int);
+  TEST_CHECK(size_DA(arr) == 16);
+  TEST_CHECK(GET_DA(arr, 5, int) == 555);
+
+  SET_DA(arr, 20, 888, int);
+  TEST_CHECK(size_DA(arr) == 16);
+  int *p = (int *)at_DA(arr, 20);
+  TEST_CHECK(p == NULL);
+
+  destroy_DA(arr, NULL, NULL);
 }
 
-void test_push_back(void) {
-  DArray *array = newDArray(10, sizeof(int));
-  for (int i = 0; i < 10; ++i) {
-    PUSH_BACK_INT_DA(array, i);
+void test_resize(void) {
+  DArray *arr = newDArray(0, sizeof(int));
+  TEST_CHECK(capacity_DA(arr) == 4);
+
+  resize_DA(arr, 10);
+  TEST_CHECK(size_DA(arr) == 10);
+  TEST_CHECK(capacity_DA(arr) >= 10);
+
+  for (int i = 0; i < 10; i++) {
+    SET_DA(arr, i, i, int);
   }
-  TEST_CHECK(size_DA(array) == 10);
-  TEST_CHECK(empty_DA(array) == false);
 
-  int a = GET_INT_DA(array, 2);
-
-  TEST_CHECK(a == 2);
-  a = GET_INT_DA(array, 5);
-  TEST_CHECK(a == 5);
-  a = GET_INT_DA(array, 9);
-  TEST_CHECK(a == 9);
-  a = GET_INT_DA(array, 0);
-  TEST_CHECK(a == 0);
-  clear_DA(array, NULL);
-  TEST_CHECK(size_DA(array) == 0);
-
-  for (int i = 0; i < 10; ++i) {
-    push_back_DA(array, &i);
+  resize_DA(arr, 15);
+  TEST_CHECK(size_DA(arr) == 15);
+  TEST_CHECK(capacity_DA(arr) >= 15);
+  for (int i = 0; i < 10; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == i);
   }
-  TEST_CHECK(size_DA(array) == 10);
+  for (int i = 10; i < 15; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == 0);
+  }
 
-  a = GET_INT_DA(array, 3);
+  resize_DA(arr, 8);
+  TEST_CHECK(size_DA(arr) == 8);
+  for (int i = 0; i < 8; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == i);
+  }
 
-  TEST_CHECK(a == 3);
-  a = GET_INT_DA(array, 7);
-  TEST_CHECK(a == 7);
-  a = GET_INT_DA(array, 9);
-  TEST_CHECK(a == 9);
-  a = GET_INT_DA(array, 0);
-  TEST_CHECK(a == 0);
-  clear_DA(array, NULL);
-  TEST_CHECK(size_DA(array) == 0);
-  TEST_CHECK(capacity_DA(array) == 10);
+  resize_DA(arr, 12);
+  TEST_CHECK(size_DA(arr) == 12);
+  for (int i = 8; i < 12; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == 0);
+  }
 
-  destroy_DA(array, NULL);
+  resize_DA(arr, 0);
+  TEST_CHECK(size_DA(arr) == 0);
+  TEST_CHECK(capacity_DA(arr) >= 4);
+
+  resize_DA(arr, -5);
+  TEST_CHECK(size_DA(arr) == 0);
+
+  destroy_DA(arr, NULL, NULL);
 }
 
-void test_expand(void) {
-  DArray *array = newDArray(0, sizeof(int));
-  for (int i = 0; i < 10; ++i) {
-    PUSH_BACK_INT_DA(array, i);
-  }
-  TEST_CHECK(size_DA(array) == 10);
-  TEST_CHECK(capacity_DA(array) == 16);
+void test_push_pop(void) {
+  DArray *arr = newDArray(2, sizeof(int));
+  TEST_CHECK(arr != NULL);
 
-  for (int i = 0; i < 200; ++i) {
-    PUSH_BACK_INT_DA(array, i);
+  for (int i = 0; i < 5; i++) {
+    push_back_DA(arr, &i);
   }
-  TEST_CHECK(size_DA(array) == (10 + 200));
-  TEST_CHECK(!empty_DA(array));
+  TEST_CHECK(size_DA(arr) == 5);
+  TEST_CHECK(capacity_DA(arr) >= 5);
+  for (int i = 0; i < 5; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == i);
+  }
 
-  destroy_DA(array, NULL);
+  int val = *(int *)pop_back_DA(arr);
+  TEST_CHECK(val == 4);
+  val = *(int *)pop_back_DA(arr);
+  TEST_CHECK(val == 3);
+  TEST_CHECK(size_DA(arr) == 3);
+
+  for (int i = 0; i < 3; i++) {
+    void *p = pop_back_DA(arr);
+    TEST_CHECK(p != NULL);
+  }
+  TEST_CHECK(size_DA(arr) == 0);
+
+  void *p = pop_back_DA(arr);
+  TEST_CHECK(p == NULL);
+
+  for (int i = 0; i < 100; i++) {
+    push_back_DA(arr, &i);
+  }
+  TEST_CHECK(size_DA(arr) == 100);
+  TEST_CHECK(capacity_DA(arr) >= 100);
+  for (int i = 0; i < 100; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == i);
+  }
+
+  destroy_DA(arr, NULL, NULL);
 }
 
-void test_pop_back(void) {
-  DArray *array = newDArray(0, sizeof(int));
-  TEST_CHECK(capacity_DA(array) == 4);
-  for (int i = 0; i < 10; ++i) {
-    PUSH_BACK_INT_DA(array, i);
+void test_move_right(void) {
+  DArray *arr = newDArray(20, sizeof(int));
+  for (int i = 0; i < 20; i++) {
+    SET_DA(arr, i, i, int);
   }
 
-  int a = POP_BACK_INT_DA(array);
-  TEST_CHECK(a == 9);
-  TEST_CHECK(size_DA(array) == 9);
+  resize_DA(arr, 23);
+  move_right_DA(arr, 5, 3);
+  TEST_CHECK(size_DA(arr) == 26);
 
-  a = POP_BACK_INT_DA(array);
-  TEST_CHECK(a == 8);
-  TEST_CHECK(size_DA(array) == 8);
+  SET_DA(arr, 5, 101, int);
+  SET_DA(arr, 6, 102, int);
+  SET_DA(arr, 7, 103, int);
 
-  clear_DA(array, NULL);
-  TEST_CHECK(size_DA(array) == 0);
+  for (int i = 0; i < 26; i++) {
+    int expected;
+    if (i < 5) {
+      expected = i;
+    } else if (i == 5) {
+      expected = 101;
+    } else if (i == 6) {
+      expected = 102;
+    } else if (i == 7) {
+      expected = 103;
+    } else if (i < 23) {
+      expected = i - 3;
+    } else {
+      expected = 0;
+    }
+    TEST_CHECK(GET_DA(arr, i, int) == expected);
+  }
 
-  PUSH_BACK_INT_DA(array, 8);
-  TEST_CHECK(size_DA(array) == 1);
-  a = POP_BACK_INT_DA(array);
-  TEST_CHECK(a == 8);
-  TEST_CHECK(size_DA(array) == 0);
+  int old_len = size_DA(arr);
+  resize_DA(arr, old_len + 2);
+  move_right_DA(arr, old_len, 2);
+  TEST_CHECK(size_DA(arr) == old_len + 4);
+  TEST_CHECK(GET_DA(arr, old_len, int) == 0);
+  TEST_CHECK(GET_DA(arr, old_len + 1, int) == 0);
+  TEST_CHECK(GET_DA(arr, old_len + 2, int) == 0);
+  TEST_CHECK(GET_DA(arr, old_len + 3, int) == 0);
 
-  destroy_DA(array, NULL);
+  int current_len = size_DA(arr);
+  move_right_DA(arr, -1, 2);
+  TEST_CHECK(size_DA(arr) == current_len);
+  move_right_DA(arr, current_len, 2);
+  TEST_CHECK(size_DA(arr) == current_len);
+  move_right_DA(arr, 0, 0);
+  TEST_CHECK(size_DA(arr) == current_len);
+  int cap = capacity_DA(arr);
+  move_right_DA(arr, 0, cap - current_len + 1);
+  TEST_CHECK(size_DA(arr) == current_len);
+
+  destroy_DA(arr, NULL, NULL);
 }
 
-void test_insert_by_pos(void) {
-  DArray *array = newDArray(0, sizeof(int));
-
-  for (int i = 0; i < 10; ++i) {
-    PUSH_BACK_INT_DA(array, i);
+void test_move_left(void) {
+  DArray *arr = newDArray(20, sizeof(int));
+  for (int i = 0; i < 20; i++) {
+    SET_DA(arr, i, i, int);
   }
 
-  TEST_CHECK(size_DA(array) == 10);
-  INSERT_INT_BY_POS_DA(array, 5, 101);
-  TEST_CHECK(GET_INT_DA(array, 5) == 101);
-  TEST_CHECK(GET_INT_DA(array, 0) == 0);
-  insert_by_pos_DA(array, 3, &(int){104});
-  TEST_CHECK(GET_INT_DA(array, 3) == 104);
-  TEST_CHECK(size_DA(array) == 12);
-  clear_DA(array, NULL);
-  TEST_CHECK(size_DA(array) == 0);
+  move_left_DA(arr, 5, 2);
+  TEST_CHECK(size_DA(arr) == 18);
+  for (int i = 0; i < 18; i++) {
+    int expected = (i < 5) ? i : i + 2;
+    TEST_CHECK(GET_DA(arr, i, int) == expected);
+  }
 
-  destroy_DA(array, NULL);
+  clear_DA(arr, NULL, NULL);
+  for (int i = 0; i < 20; i++) {
+    SET_DA(arr, i, i, int);
+  }
+  move_left_DA(arr, 0, 3);
+  TEST_CHECK(size_DA(arr) == 17);
+  for (int i = 0; i < 17; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == i + 3);
+  }
+
+  clear_DA(arr, NULL, NULL);
+  for (int i = 0; i < 20; i++) {
+    SET_DA(arr, i, i, int);
+  }
+  move_left_DA(arr, 17, 3);
+  TEST_CHECK(size_DA(arr) == 17);
+  for (int i = 0; i < 17; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == i);
+  }
+
+  int old_len = size_DA(arr);
+  move_left_DA(arr, 0, old_len + 1);
+  TEST_CHECK(size_DA(arr) == old_len);
+  move_left_DA(arr, -1, 2);
+  TEST_CHECK(size_DA(arr) == old_len);
+  move_left_DA(arr, old_len, 1);
+  TEST_CHECK(size_DA(arr) == old_len);
+
+  destroy_DA(arr, NULL, NULL);
 }
 
-void test_erase_by_pos(void) {
-  DArray *array = newDArray(0, sizeof(int));
-
-  for (int i = 0; i < 10; ++i) {
-    PUSH_BACK_INT_DA(array, i);
+void test_reverse(void) {
+  DArray *arr = newDArray(20, sizeof(int));
+  for (int i = 0; i < 20; i++) {
+    SET_DA(arr, i, i, int);
   }
-  TEST_CHECK(size_DA(array) == 10);
-  erase_by_pos_DA(array, 5, NULL);
-  TEST_CHECK(size_DA(array) == 9);
-  TEST_CHECK(GET_INT_DA(array, 5) == 6);
-  erase_by_pos_DA(array, 0, NULL);
-  TEST_CHECK(size_DA(array) == 8);
-  TEST_CHECK(GET_INT_DA(array, 0) == 1);
-  erase_by_pos_DA(array, size_DA(array) - 1, NULL);
-  TEST_CHECK(GET_INT_DA(array, size_DA(array) - 1) == 8);
-  TEST_CHECK(size_DA(array) == 7);
 
-  destroy_DA(array, NULL);
+  reverse_DA(arr, 0, 19);
+  for (int i = 0; i < 20; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == 19 - i);
+  }
+
+  clear_DA(arr, NULL, NULL);
+  for (int i = 0; i < 20; i++) {
+    SET_DA(arr, i, i, int);
+  }
+  reverse_DA(arr, 5, 14);
+  for (int i = 0; i < 20; i++) {
+    int expected;
+    if (i < 5 || i > 14)
+      expected = i;
+    else
+      expected = 5 + 14 - i;
+    TEST_CHECK(GET_DA(arr, i, int) == expected);
+  }
+
+  reverse_DA(arr, 7, 7);
+  TEST_CHECK(GET_DA(arr, 7, int) == 12);
+
+  int old_len = size_DA(arr);
+  reverse_DA(arr, -1, 5);
+  TEST_CHECK(size_DA(arr) == old_len);
+  reverse_DA(arr, 19, 20);
+  TEST_CHECK(size_DA(arr) == old_len);
+  reverse_DA(arr, 10, 5);
+  TEST_CHECK(size_DA(arr) == old_len);
+
+  destroy_DA(arr, NULL, NULL);
+}
+
+void test_clear_free(void) {
+  DArray *arr = newDArray(10, sizeof(char *));
+  char *s1 = strdup("hello");
+  char *s2 = strdup("world");
+  SET_DA(arr, 0, s1, char *);
+  SET_DA(arr, 1, s2, char *);
+
+  free_counter = 0;
+  clear_DA(arr, mock_free_cb, NULL);
+  TEST_CHECK(size_DA(arr) == 0);
+  TEST_CHECK(free_counter == 2);
+
+  clear_DA(arr, mock_free_cb, NULL);
+  TEST_CHECK(free_counter == 2);
+
+  s1 = strdup("one");
+  s2 = strdup("two");
+  SET_DA(arr, 0, s1, char *);
+  SET_DA(arr, 1, s2, char *);
+  free_counter = 0;
+  destroy_DA(arr, mock_free_cb, NULL);
+  TEST_CHECK(free_counter == 2);
+
+  arr = newDArray(10, sizeof(int));
+  for (int i = 0; i < 5; i++) {
+    SET_DA(arr, i, i, int);
+  }
+  clear_DA(arr, NULL, NULL);
+  TEST_CHECK(size_DA(arr) == 0);
+  for (int i = 0; i < 5; i++) {
+    push_back_DA(arr, &i);
+  }
+  for (int i = 0; i < 5; i++) {
+    TEST_CHECK(GET_DA(arr, i, int) == i);
+  }
+
+  destroy_DA(arr, NULL, NULL);
+}
+
+void test_combined(void) {
+  DArray *arr = newDArray(10, sizeof(int));
+  for (int i = 0; i < 10; i++) {
+    SET_DA(arr, i, i, int);
+  }
+
+  resize_DA(arr, 15);
+  move_right_DA(arr, 5, 3);
+  TEST_CHECK(size_DA(arr) == 18);
+
+  SET_DA(arr, 5, 100, int);
+  SET_DA(arr, 6, 200, int);
+  SET_DA(arr, 7, 300, int);
+
+  for (int i = 0; i < 18; i++) {
+    int expected;
+    if (i < 5) {
+      expected = i;
+    } else if (i == 5) {
+      expected = 100;
+    } else if (i == 6) {
+      expected = 200;
+    } else if (i == 7) {
+      expected = 300;
+    } else if (i < 13) {
+      expected = i - 3;
+    } else {
+      expected = 0;
+    }
+    TEST_CHECK(GET_DA(arr, i, int) == expected);
+  }
+
+  move_left_DA(arr, 10, 2);
+  TEST_CHECK(size_DA(arr) == 16);
+
+  destroy_DA(arr, NULL, NULL);
+}
+
+void test_errors(void) {
+  DArray *arr = newDArray(10, sizeof(int));
+
+  clear_DA(NULL, NULL, NULL);
+  destroy_DA(NULL, NULL, NULL);
+  resize_DA(NULL, 10);
+  move_right_DA(NULL, 0, 1);
+  move_left_DA(NULL, 0, 1);
+  reverse_DA(NULL, 0, 1);
+
+  SET_DA(arr, -1, 1, int);
+  TEST_CHECK(size_DA(arr) == 0);
+  SET_DA(arr, 100, 1, int);
+  TEST_CHECK(size_DA(arr) == 0);
+  TEST_CHECK(at_DA(arr, 100) == NULL);
+
+  push_back_DA(arr, NULL);
+  TEST_CHECK(size_DA(arr) == 0);
+  TEST_CHECK(pop_back_DA(arr) == NULL);
+
+  destroy_DA(arr, NULL, NULL);
 }
 
 TEST_LIST = {{"create_destroy", test_create_destroy},
-             {"at", test_at},
-             {"push_back", test_push_back},
-             {"expand", test_expand},
-             {"pop_back", test_pop_back},
-             {"insert", test_insert_by_pos},
-             {"erase", test_erase_by_pos},
+             {"set_get", test_set_get},
+             {"resize", test_resize},
+             {"push_pop", test_push_pop},
+             {"move_right", test_move_right},
+             {"move_left", test_move_left},
+             {"reverse", test_reverse},
+             {"clear_free", test_clear_free},
+             {"combined", test_combined},
+             {"errors", test_errors},
              {NULL, NULL}};

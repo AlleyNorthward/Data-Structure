@@ -3,14 +3,8 @@
 
 #include <stdbool.h>
 
-#define AT_PTR_DA(arr, pos, type)                                              \
-  ((type *)((char *)(arr)->data + (pos) * (arr)->elem_size))
-
-#define GET_DA(arr, pos, type) (*AT_PTR_DA(arr, pos, type))
-#define GET_INT_DA(arr, pos) GET_DA(arr, pos, int)
-#define PUSH_BACK_INT_DA(arr, val) push_back_DA((arr), &(int){val})
-#define POP_BACK_INT_DA(arr) (*(int*)pop_back_DA(arr))
-#define INSERT_INT_BY_POS_DA(arr, pos, val) insert_by_pos_DA((arr), pos, &(int){val})
+#define SET_DA(arr, pos, val, type) set_DA(arr, pos, &(type){val})
+#define GET_DA(arr, pos, type) (*(type *)at_DA(arr, pos))
 
 typedef struct DArray {
   void *data;
@@ -19,21 +13,24 @@ typedef struct DArray {
   int elem_size;
 } DArray;
 
-DArray *newDArray(int cap, int elem_size);
+DArray *newDArray(int capacity, int elem_size);
 bool empty_DA(DArray *arr);
-void *at_DA(DArray *arr, int pos);
-void clear_DA(DArray *arr, void (*free_cb)(void *elem));
-void destroy_DA(DArray *arr, void (*free_cb)(void *elem));
+void clear_DA(DArray *arr, void (*free_cb)(void *elem, void *args), void *args);
+void destroy_DA(DArray *arr, void (*free_cb)(void *elem, void *args),
+                void *args);
 
 int size_DA(DArray *arr);
 int capacity_DA(DArray *arr);
 void print_DA(DArray *arr, void (*print_cb)(void *elem));
+void resize_DA(DArray *arr, int new_len);
 
-void expand_DA(DArray *arr);
 void push_back_DA(DArray *arr, void *elem);
-void* pop_back_DA(DArray *arr);
+void *pop_back_DA(DArray *arr);
+void set_DA(DArray *arr, int pos, void *elem);
+void *at_DA(DArray *arr, int pos);
 
-void insert_by_pos_DA(DArray *arr, int pos, void *elem);
-void erase_by_pos_DA(DArray *arr, int pos, void (*free_cb)(void *elem));
+void move_right_DA(DArray *arr, int pos, int n);
+void move_left_DA(DArray *arr, int pos, int n);
+void reverse_DA(DArray *arr, int left_pos, int right_pos);
 
 #endif

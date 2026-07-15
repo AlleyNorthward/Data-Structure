@@ -1,5 +1,6 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef DSDEF_H
+#define DSDEF_H
+#include <stdbool.h>
 #include <stddef.h>
 
 // #define container_of(ptr, type, member) \
@@ -10,5 +11,7 @@
 
 #define container_of(ptr, type, member)                                        \
   ((type *)((char *)(ptr) - offsetof(type, member)))
-#endif
 
+typedef int (*cmp_t)(void *a, void *b);
+
+#endif

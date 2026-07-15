@@ -1,4 +1,4 @@
-#include "LStack.h"
+#include "stack/LStack.h"
 #include <stdlib.h>
 
 LStack *newLStack() {
@@ -15,16 +15,18 @@ LStack *newLStack() {
   return stack;
 }
 
-void clear_LS(LStack *stack, void (*free_cb)(Node *node)) {
+void clear_LS(LStack *stack, void (*free_cb)(Node *node, void *args),
+              void *args) {
   if (!stack)
     return;
-  clear_L(stack->list, free_cb);
+  clear_L(stack->list, free_cb, args);
 }
 
-void destroy_LS(LStack *stack, void (*free_cb)(Node *node)) {
+void destroy_LS(LStack *stack, void (*free_cb)(Node *node, void *args),
+                void *args) {
   if (!stack)
     return;
-  destroy_L(stack->list, free_cb);
+  destroy_L(stack->list, free_cb, args);
   free(stack);
 }
 

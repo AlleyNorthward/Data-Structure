@@ -15,8 +15,10 @@ typedef struct CList {
 
 CList *newCList();
 bool empty_CL(CList *list);
-void clear_CL(CList *list, void (*free_cb)(CNode *node));
-void destroy_CL(CList *list, void (*free_cb)(CNode *node));
+void clear_CL(CList *list, void (*free_cb)(CNode *node, void *args),
+              void *args);
+void destroy_CL(CList *list, void (*free_cb)(CNode *node, void *args),
+                void *args);
 
 int size_CL(CList *list);
 CNode *front_CL(CList *list);
@@ -31,9 +33,9 @@ CNode *pop_front_CL(CList *list);
 CNode *find_CL(CList *list, int pos);
 void reverse_CL(CList *list);
 void insert_CL(CList *list, CNode *pre, CNode *node);
-void erase_CL(CList *list, CNode *pre, void (*free_cb)(CNode *node));
+CNode *erase_CL(CList *list, CNode *pre);
 
 void insert_by_pos_CL(CList *list, int pos, CNode *node);
-void erase_by_pos_CL(CList *list, int pos, void (*free_cb)(CNode *node));
+CNode *erase_by_pos_CL(CList *list, int pos);
 
 #endif
