@@ -13,12 +13,12 @@ typedef struct BSTree {
 BSTree *newBSTree();
 void destroy_BS(BSTree *tree, void (*free_cb)(BSNode *, void *), void *args);
 
-void insert_BS(BSTree *tree, BSNode *new_node,
-               int (*cmp)(BSNode *new_node, BSNode *tree_node));
+void insert_BS(BSTree *tree, BSNode *node,
+               int (*cmp)(BSNode *root, BSNode *new));
 BSNode *find_BS(BSTree *tree, BSNode *node,
-                int (*cmp)(BSNode *tree_node, BSNode *node));
+                int (*cmp)(BSNode *root, BSNode *node));
 
 BSNode *erase_BS(BSTree *tree, BSNode *node,
-                 int (*cmp)(BSNode *tree_node, BSNode *node));
+                 int (*cmp)(BSNode *root, BSNode *node));
 
 #endif
