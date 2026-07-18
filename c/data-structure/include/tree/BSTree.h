@@ -14,7 +14,7 @@ BSTree *newBSTree();
 void destroy_BS(BSTree *tree, void (*free_cb)(BSNode *, void *), void *args);
 
 void insert_BS(BSTree *tree, BSNode *node,
-               int (*cmp)(BSNode *root, BSNode *new));
+               int (*cmp)(BSNode *root, BSNode *node));
 BSNode *find_BS(BSTree *tree, BSNode *node,
                 int (*cmp)(BSNode *root, BSNode *node));
 
